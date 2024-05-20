@@ -1,0 +1,13 @@
+Datasets/
+log/
+save_model/
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+save_df/
+log_df/
+log_cty/
+save_cty/
+save_model_cty/
+log_ablation/
+save_model_ablation/
