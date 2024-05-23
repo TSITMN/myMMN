@@ -270,6 +270,7 @@ class embed_net(nn.Module):
         x = self.base_resnet(x)
 
         chunks = [self.avgpool(x_part) for x_part in torch.chunk(x, 4, 0)]
+        chunks = [x.view(x.size(0) , x.size(1)) for x in chunks]
         rgb, m_rgb, ir, m_ir = chunks
 
         x_parts = torch.chunk(x, 4, 2)

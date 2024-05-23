@@ -9,5 +9,5 @@ log_df/
 log_cty/
 save_cty/
 save_model_cty/
-log_ablation/
+log_ablation/vis_log/
 save_model_ablation/

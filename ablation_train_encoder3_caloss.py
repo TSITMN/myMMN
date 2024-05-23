@@ -20,7 +20,7 @@ from tensorboardX import SummaryWriter
 from random_erasing import RandomErasing
 from itertools import chain
 from datetime import datetime
-# from centerloss import CenterTripletLoss , CenterLoss
+from center_loss import CenterTripletLoss , CenterLoss
 
 parser = argparse.ArgumentParser(description='PyTorch Cross-Modality Training')
 parser.add_argument('--dataset', default='sysu', help='dataset name: regdb or sysu]')
@@ -192,10 +192,14 @@ loader_batch = args.batch_size * args.num_pos
 criterion_tri= OriTripletLoss(batch_size=loader_batch, margin=args.margin)
 self_critial= TriLoss(batch_size=loader_batch, margin=args.margin)
 criterion_div = DCLoss(num=2)
+center_cluster_loss = CenterTripletLoss(8, 0.3)
+center_loss = CenterLoss(num_classes=395,feat_dim=2048)
 
 criterion_id.to(device)
 criterion_tri.to(device)
 criterion_div.to(device)
+center_cluster_loss.to(device)
+center_loss.to(device)
 
 if args.optim == 'sgd':
     # 生成所有bottlenecks和classifiers的参数列表
@@ -420,7 +424,7 @@ def test(epoch):
 # training
 print('==> Start Training...')
 start_epoch = 0
-for epoch in range(start_epoch, 81 - start_epoch):
+for epoch in range(start_epoch, 200 - start_epoch):
 
     print('==> Preparing Data Loader...')
     # identity sampler

@@ -308,7 +308,7 @@ def train(epoch):
         _, predicted = out1.max(1)
         correct += (predicted.eq(labels).sum().item() / 2)
 
-        loss = loss_id + loss_tri + loss_dcl + loss_c + loss_cc
+        loss = loss_id + loss_tri + loss_dcl 
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
