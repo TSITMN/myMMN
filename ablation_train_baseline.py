@@ -13,14 +13,15 @@ import torchvision.transforms as transforms
 from data_loader import SYSUData, RegDBData, TestData
 from data_manager import *
 from eval_metrics import eval_sysu, eval_regdb , eval_data
-from ablation_model_encoder3_share1_caloss import embed_net
+from ablation_model_caloss import embed_net
 from utils import *
 from loss import OriTripletLoss, TriLoss, DCLoss
+from center_loss import CenterLoss , CenterTripletLoss
 from tensorboardX import SummaryWriter
 from random_erasing import RandomErasing
 from itertools import chain
 from datetime import datetime
-from center_loss import CenterTripletLoss , CenterLoss
+# from centerloss import CenterTripletLoss , CenterLoss
 
 parser = argparse.ArgumentParser(description='PyTorch Cross-Modality Training')
 parser.add_argument('--dataset', default='sysu', help='dataset name: regdb or sysu]')
@@ -173,7 +174,6 @@ else:
 net.to(device)
 cudnn.benchmark = True
 
-start_epoch = 0
 if len(args.resume) > 0:
     model_path = checkpoint_path + args.resume
     if os.path.isfile(model_path):
@@ -193,14 +193,11 @@ loader_batch = args.batch_size * args.num_pos
 criterion_tri= OriTripletLoss(batch_size=loader_batch, margin=args.margin)
 self_critial= TriLoss(batch_size=loader_batch, margin=args.margin)
 criterion_div = DCLoss(num=2)
-center_cluster_loss = CenterTripletLoss(8, 0.3)
-center_loss = CenterLoss(num_classes=395,feat_dim=2048)
 
 criterion_id.to(device)
 criterion_tri.to(device)
 criterion_div.to(device)
-center_cluster_loss.to(device)
-center_loss.to(device)
+
 
 if args.optim == 'sgd':
     # 生成所有bottlenecks和classifiers的参数列表
@@ -306,14 +303,11 @@ def train(epoch):
         loss_dcl = (criterion_div(torch.cat((ft12, ft14),0)) + criterion_div(torch.cat((ft22, ft24),0)) + criterion_div(torch.cat((ft32, ft34),0)) + criterion_div(torch.cat((ft42, ft44),0)))*0.25*args.delta
 
 
-        loss_cc = (center_cluster_loss(torch.cat((rgb, ir),0), lbs)[0] + center_cluster_loss(torch.cat((rgb, m_rgb),0), lbs)[0] + center_cluster_loss(torch.cat((m_rgb, ir),0), lbs)[0] + center_cluster_loss(torch.cat((m_rgb, m_ir),0), lbs)[0])/4
-        loss_c  = (center_loss(torch.cat((rgb, ir),0), lbs) + center_loss(torch.cat((rgb, m_rgb),0), lbs) + center_loss(torch.cat((m_rgb, ir),0), lbs) + center_loss(torch.cat((m_rgb, m_ir),0), lbs))/4
-
         correct += (ba / 2)
         _, predicted = out1.max(1)
         correct += (predicted.eq(labels).sum().item() / 2)
 
-        loss = loss_id + loss_tri + loss_dcl + loss_c + loss_cc
+        loss = loss_id + loss_tri + loss_dcl 
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
@@ -424,7 +418,8 @@ def test(epoch):
 
 # training
 print('==> Start Training...')
-for epoch in range(start_epoch, 201 - start_epoch):
+start_epoch = 0
+for epoch in range(start_epoch, 200 - start_epoch):
 
     print('==> Preparing Data Loader...')
     # identity sampler

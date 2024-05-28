@@ -3,7 +3,6 @@ import torch.nn as nn
 from torch.nn import init
 from resnet import resnet50, resnet18
 import torch.nn.functional as F
-from resnest.torch import resnest50
 from DaNetmodule import DANetHead
 
 class Normalize(nn.Module):

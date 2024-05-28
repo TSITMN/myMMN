@@ -4,21 +4,13 @@ import torch.utils.data as data
 
 
 class SYSUData(data.Dataset):
-    def __init__(self, data_dir,  transform=None, colorIndex = None, thermalIndex = None , model_test = False):
-        if not model_test:
+    def __init__(self, data_dir,  transform=None, colorIndex = None, thermalIndex = None):
             # Load training images (path) and labels
-            train_color_image = np.load(data_dir + 'train_rgb_resized_img.npy')
-            self.train_color_label = np.load(data_dir + 'train_rgb_resized_label.npy')
+        train_color_image = np.load(data_dir + 'train_rgb_resized_img.npy')
+        self.train_color_label = np.load(data_dir + 'train_rgb_resized_label.npy')
 
-            train_thermal_image = np.load(data_dir + 'train_ir_resized_img.npy')
-            self.train_thermal_label = np.load(data_dir + 'train_ir_resized_label.npy')
-        else :
-            print("model_testing")
-            train_color_image = np.load(data_dir + 'subset_train_rgb_resized_img.npy')
-            self.train_color_label = np.load(data_dir + 'subset_train_rgb_resized_label.npy')
-
-            train_thermal_image = np.load(data_dir + 'subset_train_ir_resized_img.npy')
-            self.train_thermal_label = np.load(data_dir + 'subset_train_ir_resized_label.npy')
+        train_thermal_image = np.load(data_dir + 'train_ir_resized_img.npy')
+        self.train_thermal_label = np.load(data_dir + 'train_ir_resized_label.npy')
         
         # BGR to RGB
         self.train_color_image   = train_color_image
