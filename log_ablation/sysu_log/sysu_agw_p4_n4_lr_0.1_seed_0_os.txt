@@ -1,0 +1,35 @@
+==========
+Args:Namespace(dataset='sysu', lr=0.1, optim='sgd', arch='resnet50', resume='sysu_encoder3_share1_caloss_agw_p4_n4_lr_0.1_seed_0_best.t', test_only=False, model_path='save_model_ablation/', save_epoch=20, log_path='log_ablation/', vis_log_path='log_ablation/vis_log/', workers=7, img_w=192, img_h=384, batch_size=4, test_batch=64, method='agw', margin=0.3, num_pos=4, trial=1, seed=0, gpu='0', mode='all', delta=0.2, notes='')
+==========
+==> Loading data..
+Dataset sysu statistics:
+  ------------------------------
+  subset   | # ids | # images
+  ------------------------------
+  visible  |   395 |    22258
+  thermal  |   395 |    11909
+  ------------------------------
+  query    |    96 |     3803
+  gallery  |    96 |      301
+  ------------------------------
+Data Loading Time:	 11.263
+==> Building model..
+==> loading checkpoint sysu_encoder3_share1_caloss_agw_p4_n4_lr_0.1_seed_0_best.t
+==> loaded checkpoint sysu_encoder3_share1_caloss_agw_p4_n4_lr_0.1_seed_0_best.t (epoch 34)
+==> Start Training...
+==> Preparing Data Loader...
+34
+[20927 20945 20945 ... 18532 18519 18514]
+[10597 10605 10597 ...  8132  8147  8132]
+Test Epoch: 34
+Extracting Gallery Feature...
+Extracting Time:	 5.534
+Extracting Query Feature...
+Extracting Time:	 13.952
+[[  2   3   1 ...  94 284 280]
+ [ 49  50  97 ... 109 241  39]
+ [  2   3   1 ... 258  39  42]
+ ...
+ [166  10 164 ... 125 299 297]
+ [166  11 104 ... 288  80 286]
+ [ 11  10 166 ... 104 289   2]]
